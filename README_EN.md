@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="src/FusionAnalyser/res/dark/images/titlebar/FusionAnalyser.png" alt="FusionAnalyser Logo" width="200"/>
+<img src="images/logo.png" alt="FusionAnalyser Logo" width="200"/>
 
 **Professional, Open-Source Digital Dental Model Measurement Analysis Software**
 
