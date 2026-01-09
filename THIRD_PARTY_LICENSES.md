@@ -5,11 +5,13 @@ This document lists the third-party libraries actually used in FusionAlign and t
 ## Framework Dependencies
 
 ### Qt Framework
-- **Version**: 5.x 
+- **Version**: 5.15.2
 - **Modules Used**: QtCore, QtGui, QtWidgets, QtOpenGL, QtXml, QtXmlPatterns, QtNetwork, QtScript, QtPrintSupport, QtSvg, QtSql
-- **License**: LGPL v3
+- **License**: GNU Lesser General Public License v3 (LGPL v3)
 - **Website**: https://www.qt.io/
-- **Note**: Qt is the primary GUI framework. When using LGPL version, dynamic linking is required.
+- **Source Code**: https://www.qt.io/download-open-source
+- **License File**: https://doc.qt.io/qt-5/lgpl.html
+- **Important**: This software dynamically links to Qt libraries in compliance with LGPL v3 requirements. Users are free to replace the Qt libraries with modified versions.
 
 ## Core Graphics Libraries
 

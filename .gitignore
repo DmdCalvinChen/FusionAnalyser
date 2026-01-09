@@ -1,0 +1,125 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.opensdf
+*.sdf
+*.db
+*.filters
+*.exp
+
+# Build directories
+Debug/
+Release/
+release/
+GeneratedFiles/
+build-*/
+distrib/
+distribD/
+*.build/
+
+# Qt generated files
+ui_*.h
+moc_*.cpp
+qrc_*.cpp
+moc_predefs.h
+*.qmake.stash
+*.pro.user
+*.pro.user.*
+
+# IDE files
+.vscode/
+.vs/
+.idea/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.db
+
+# Qt Creator
+*.autosave
+
+# Visual Studio
+*.ilk
+*.pdb
+*.idb
+*.pch
+
+# Test data and temporary files
+*.off
+*.STL
+*.stl
+*.txt
+!README.txt
+!LICENSE.txt
+!CHANGELOG.md
+!CONTRIBUTING.md
+!BUILD.md
+!THIRD_PARTY_LICENSES.md
+
+# Logs
+*.log
+logs/
+src/fusionalign/logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+config.ini
+secrets.json
+.env
+.env.local
+
+# Distribution packages
+*.zip
+*.tar.gz
+*.tar.bz2
+*.dmg
+*.msi
+*.deb
+*.rpm
+
+# External library build artifacts (keep source, ignore builds)
+src/external/lib/
+src/external/*/build/
+src/external/*/bin/
+src/external/*/obj/
+
+# qmake generated Makefiles
+Makefile
+Makefile.*
+*.Makefile
+*.Makefile.*
+.claude/settings.local.json
+/.claude
+src/common_ext/.\!6518\!Makefile

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="images/logo.png" alt="FusionAnalyser Logo" width="200"/>
+<img src="src/FusionAnalyser/res/dark/images/titlebar/FusionAnalyser.png" alt="FusionAnalyser Logo" width="200"/>
 
 **专业、开源的数字化牙科模型测量分析软件**
 
