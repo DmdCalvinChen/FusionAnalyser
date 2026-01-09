@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>common_base_ch.qm</file>
+        <file>common_base_en.qm</file>
+        <file>res/dark/close.svg</file>
+        <file>res/dark/info.png</file>
+        <file>res/dark/question.png</file>
+    </qresource>
+</RCC>

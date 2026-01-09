@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>EditModelMarkPlugin_zh_CN.qm</file>
+        <file>EditModelMarkPlugin_en.qm</file>
+        <file>ui/gif/fixtooth.gif</file>
+        <file>ui/gif/misstooth.gif</file>
+        <file>ui/gif/toothadjust.gif</file>
+        <file>ui/gif/fixtooth_ENG.gif</file>
+        <file>ui/gif/misstooth_ENG.gif</file>
+        <file>ui/gif/toothadjust_ENG.gif</file>
+        <file>ui/gif/operation.gif</file>
+        <file>ui/gif/operation_ENG.gif</file>
+    </qresource>
+</RCC>

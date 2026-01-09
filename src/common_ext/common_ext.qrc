@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/doctorPreference.json</file>
+        <file>resources/prescriptionInfoData.json</file>
+        <file>resources/checkResultInfoData.json</file>
+        <file>resources/languages/common_ext_ch.qm</file>
+        <file>pointcloud/cloud_vert_shader.txt</file>
+        <file>pointcloud/cloud_face_shader.txt</file>
+        <file>pointcloud/mesh_vert_shader.txt</file>
+        <file>pointcloud/mesh_face_shader.txt</file>
+    </qresource>
+</RCC>

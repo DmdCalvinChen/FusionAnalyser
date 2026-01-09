@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/cur_info.png</file>
+        <file>images/icon_info_overlay.png</file>
+        <file>overlayCh.qm</file>
+        <file>overlayEn.qm</file>
+        <file>images/overlap.svg</file>
+        <file>images/overlap_pressed.svg</file>
+        <file>images/overlayAnalysis.png</file>
+        <file>images/overlayAnalysis_pressed.png</file>
+        <file>images/overlap_disabled.svg</file>
+        <file>images/overlap_normal.svg</file>
+        <file>images/overlay.gif</file>
+        <file>images/overlay_ENG.gif</file>
+    </qresource>
+</RCC>

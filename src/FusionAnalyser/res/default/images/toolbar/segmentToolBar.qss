@@ -1,0 +1,93 @@
+﻿QToolBar
+{
+    background-color:rgb(255,255,255); border:none;
+    min-height:60px;
+}
+QToolButton{
+    background-color:white;
+    min-width:60px;
+    /* max-height: 60px; min-height:60px; */
+    font: 10pt "微软雅黑"; 
+    border-bottom-style:outset;
+    border-bottom-color:rgb(255, 255,255);
+    border-bottom-width:2px;
+    border-radius:1px;padding:0px 0px;
+    margin:0px 0px 0px 0px;
+}
+QToolButton:hover{
+    background-color:rgb(223, 251,255);
+    border-bottom-width:2px;
+    border-bottom-color:rgb(72, 216,253);
+}
+QToolButton:pressed{
+    background-color:rgb(223, 251,255);
+    border-bottom-color:rgb(72, 216,253);
+    color:rgb(55,185,218); 
+}
+
+QToolTip{color:black; background-color : white;} 
+#loadCtBtn
+{
+    min-height:32px;
+    background-color:#67CDCD;
+    border-radius:5px;color:white;
+    font: 10pt "微软雅黑";
+    margin:10,10,15,15;
+    color:white;
+}
+#loadCtBtn:disabled{background-color:rgb(205,205,205);color:rgb(120,120,120);}
+#loadCtBtn:hover{background-color:#5BC7C7;color:white;border-bottom-color:#5BC7C7;}
+#loadCtBtn:pressed{background-color:#18BBC5;}
+
+#saveSegBtn
+{
+    min-height:32px;
+    background-color:#9196F2;
+    border-radius:5px;color:white;
+    font: 10pt "微软雅黑";
+    margin:10,10,15,15;
+    color:white;
+}
+#saveSegBtn:disabled{background-color:rgb(205,205,205);color:rgb(120,120,120);}
+#saveSegBtn:hover{background-color:#8288F1;color:white;border-bottom-color:#8288F1;}
+#saveSegBtn:pressed{background-color:#5D64F1;}
+
+#sendSegBtn
+{
+    min-height:32px;
+    background-color:#67AADF;
+    border-radius:5px;color:white;
+    font: 10pt "微软雅黑";
+    margin:10,10,15,15;
+    border-right-width:10px;
+
+}
+#sendSegBtn:disabled{background-color:rgb(205,205,205);color:rgb(120,120,120);}
+#sendSegBtn:hover{background-color:#57A3DF;color:white;border-bottom-color:#57A3DF;}
+#sendSegBtn:pressed{background-color:#3C96DC;color:white;}
+
+
+QToolBar#redoUndoToolBar QToolButton
+    background-color:white;
+    min-width:60px; 
+    max-width: 80px;
+    /* max-height: 60px; min-height:60px; */
+    font: 10pt "微软雅黑";
+    border-bottom-style:outset;
+    border-bottom-color:rgb(255, 255,255);
+    border-bottom-width:2px;
+    border-radius:1px;padding:0px 0px;
+    margin:0px 0px 0px 0px;
+}
+QToolBar#redoUndoToolBar QToolButton:hover{
+    background-color:rgb(223, 251,255);
+    border-bottom-width:2px;
+    border-bottom-color:rgb(72, 216,253);
+}
+QToolBar#redoUndoToolBar QToolButton:pressed{
+    background-color:rgb(223, 251,255);
+    border-bottom-color:rgb(72, 216,253);
+    color:rgb(55,185,218); 
+}
+
+QToolTip{color:black; background-color:white;} 

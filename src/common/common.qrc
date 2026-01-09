@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>common_ch.qm</file>
+    </qresource>
+</RCC>

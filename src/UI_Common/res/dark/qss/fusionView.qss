@@ -1,0 +1,82 @@
+﻿QWidget#fusionViewGui .QPusButton{
+	iconSize:32px 32px;
+	border-style:flat;
+	background:transparent;
+}
+QPushButton#upDentalBtn{
+    border-image:url(:/res/images/view/upDental.png);
+}
+QPushButton#upDentalBtn:hover,QPushButton#upDentalBtn:checked{
+    border-image:url(:/res/images/view/upDental_pressed.png)
+}
+/* upViewbtn*/
+QPushButton#upViewBtn{
+    border-image:url(:/res/images/view/upView.png);
+}
+QPushButton#upViewBtn:hover,QPushButton#upViewBtn:pressed{
+    border-image:url(:/res/images/view/upView_pressed.png)
+}
+
+/*right view Btn */
+QPushButton#rightViewBtn{
+    border-image:url(:/res/images/view/rightView.png);
+}
+QPushButton#rightViewBtn:hover,QPushButton#rightViewBtn:pressed{
+    border-image:url(:/res/images/view/rightView_pressed.png)
+}
+/* front view Btn */
+QPushButton#frontViewBtn{
+    border-image:url(:/res/images/view/frontView.png);
+}
+QPushButton#frontViewBtn:hover,QPushButton#frontViewBtn:pressed{
+    border-image:url(:/res/images/view/frontView_pressed.png)
+}
+
+/*left view Btn*/
+QPushButton#leftViewBtn{
+    border-image:url(:/res/images/view/leftView.png);
+}
+QPushButton#leftViewBtn:hover,QPushButton#leftViewBtn:pressed{
+    border-image:url(:/res/images/view/leftView_pressed.png)
+}
+
+/*bottom view Btn*/
+QPushButton#bottomViewBtn{
+    border-image:url(:/res/images/view/downView.png);
+}
+QPushButton#bottomViewBtn:hover,QPushButton#bottomViewBtn:pressed{
+    border-image:url(:/res/images/view/downView_pressed.png)
+}
+
+/*down dental btn*/
+
+QPushButton#downDentalBtn{
+    border-image:url(:/res/images/view/downDental.png);
+}
+QPushButton#downDentalBtn:hover,QPushButton#downDentalBtn:checked{
+    border-image:url(:/res/images/view/downDental_pressed.png)
+}
+
+
+QPushButton#selectDownDentalBtn{
+    border-image:url(:/res/images/view/selectDown.png);
+}
+QPushButton#selectDownDentalBtn:hover,QPushButton#selectDownDentalBtn:checked{
+    border-image:url(:/res/images/view/selectDown_pressed.png)
+}
+
+
+QPushButton#selectUpDentalBtn{
+    border-image:url(:/res/images/view/selectUp.png);
+}
+QPushButton#selectUpDentalBtn:hover,QPushButton#selectUpDentalBtn:checked{
+    border-image:url(:/res/images/view/selectUp_pressed.png)
+}
+/*selected updental btn*/
+/*QPushButton#selectUpDentalBtn{
+	border-image:url(:/res/images/view/*/
+
+QToolTip{border:1px solid rgb(118, 118, 118); 
+        background-color: rgb(255,255,255); color:rgb(0,0,0);} 
+
+

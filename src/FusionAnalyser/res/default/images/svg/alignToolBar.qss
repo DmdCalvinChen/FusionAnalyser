@@ -1,0 +1,106 @@
+QToolBar
+{
+    background-color:white;
+    min-height:60px;
+    /* max-height:60px; */
+    margin:0px 0px 0px 0px;
+}
+#historyBtn{
+    min-height:32px;
+    margin:10,10,15,15;
+    background-color:#8dc954;
+    border-radius:5px;font-size:18px;color:white;
+    font: 10pt "微软雅黑"; 
+    color:white;
+}
+
+
+#historyBtn:disabled{background-color:rgb(205,205,205);color:rgb(120,120,120);}
+#historyBtn:hover{background-color:#72c734;color:white;}
+#historyBtn:pressed{background-color:#43CC06;color:white;}
+
+#defySplitBtn{
+    min-height:32px;
+    margin:10,10,15,15;
+    /* padding: 0,15,0,0; */
+    background-color:#E988A8;
+    border-radius:5px;font-size:18px;color:white;
+    font: 10pt "微软雅黑";
+    text-align: center;
+    align-content: center;
+}
+
+
+#defySplitBtn:disabled{background-color:rgb(205,205,205);color:rgb(120,120,120);}
+#defySplitBtn:hover{background-color:#E9779C;color:white;}
+#defySplitBtn:pressed{background-color:#E94E81;color:white;}
+
+QToolButton#uploadAlignBtn
+{
+    min-height:32px;
+    margin:10,10,15,15;
+    background-color:#67AADF;
+    border-radius:5px;font-size:18px;color:white;
+    font: 10pt "微软雅黑";
+}
+QToolButton#uploadAlignBtn:disabled{background-color:rgb(205,205,205);color:rgb(120,120,120);}
+QToolButton#uploadAlignBtn:hover{background-color:#57A3DF;color:white;}
+QToolButton#uploadAlignBtn:pressed{background-color:#3C96DC;color:white;}
+
+
+.QToolBar#alignProjBar,#alignDecoratgeBar,#redoUndoToolBar
+{
+    background-color: white;
+    margin:0 0 0 0;
+}
+QToolBar#alignDecoratgeBar QToolButton
+{
+    background-color:white;
+    min-width:60px;
+    /* max-height: 54px; min-height:54px; */
+    font: 10pt "微软雅黑";
+    border-bottom-style:solid;
+    border-bottom-color:rgb(255, 255,255);
+    border-bottom-width:2px;
+    border-image-repeat:stretch;
+    border-radius:1px;padding:0px 0px;
+    margin:2 2 2 2;
+}
+QToolBar#alignDecoratgeBar QToolButton:hover{
+    background-color:rgb(223, 251,255);
+    border-bottom-width:2px;
+    border-bottom-color:rgb(72, 216,253);
+}
+QToolBar#alignDecoratgeBar QToolButton:checked{
+    background-color:rgb(223, 251,255);
+    border-bottom-color:rgb(72, 216,253);
+    color:rgb(55,185,218); 
+}
+
+
+
+
+QToolBar#redoUndoToolBar QToolButton,#alignProjBar QToolButton
+{
+    background-color:white;
+    min-width:60px;  max-width: 80px;
+    /* max-height: 60px; min-height:60px; */
+    font: 10pt "微软雅黑";
+    border-bottom-style:outset;
+    border-bottom-color:rgb(255, 255,255);
+    border-bottom-width:2px;
+    border-radius:1px;padding:0px 0px;
+    margin:0px 0px 0px 0px;
+}
+QToolBar#redoUndoToolBar QToolButton:hover,#alignProjBar  QToolButton:hover{
+    background-color:rgb(223, 251,255);
+    border-bottom-width:2px;
+    border-bottom-color:rgb(72, 216,253);
+}
+QToolBar#redoUndoToolBar QToolButton:pressed,#alignProjBar    QToolButton:pressed{
+    background-color:rgb(223, 251,255);
+    border-bottom-color:rgb(72, 216,253);
+    color:rgb(55,185,218); 
+}
+QToolTip{color:black; background-color:white;} 
+

@@ -1,0 +1,62 @@
+﻿QLabel#loginBackgroundLabel
+{
+	border-image:url(:/res/images/loginDlg/login_left_pic.png);
+}
+QLabel#loginLogoLabel
+{
+	background-image:url(:/res/images/loginDlg/logo.png);
+	background-position:center;
+	background-repeat:no-repeat;
+}
+QLineEdit#lineEditPassWord,#lineEditUserName
+{
+	border-color:rgb(188, 188, 188);
+	border-width:1px;
+	border-radius:5px;
+	border-style:groove;
+    font: 10pt "微软雅黑";
+    /*color: #535659;*/
+    color:black;
+}
+QPushButton#loginBtn
+{
+background-color:#37B9DA;
+color:white;
+border-radius:6px;
+min-height:30px;
+font: 10pt "微软雅黑";
+}
+QPushButton#loginBtn:hover
+{
+background-color:#2198B7;
+}
+QPushButton#loginBtn:pressed
+{
+background-color:#2198B7;
+}
+QDialog#LoginDlg
+{
+	background-color:white;
+}
+QDialog#LoginDlg QPushButton#closeBtn
+{
+   background-color:rgba(255,255,255,0);
+   border-image:url(:/svg/res/images/loginDlg/close.svg);
+}
+
+QDialog#LoginDlg QPushButton#closeBtn:pressed
+{
+   border-image:url(:/svg/res/images/loginDlg/close_pressed.svg);
+}
+
+QDialog#LoginDlg QProgressBar#fusionLoginProgressBar {
+    border-radius: 3px;
+    color: #535659;
+    text-align: center;
+    background: #d0eef2;    ;
+    font: 9pt "微软雅黑";
+}
+QDialog#LoginDlg QProgressBar#fusionLoginProgressBar::chunk:horizontal{  
+    border-radius:3px;
+    background:#37B9DA;
+}
