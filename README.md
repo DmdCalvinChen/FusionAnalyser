@@ -1,104 +1,67 @@
-# FusionAnalyser
+# FusionAnalyser (WebUI Edition) 🦷
 
-<div align="center">
+> **⚠️ 架构变更说明 (2026 更新)**：
+> 本项目最初是一个基于 C++ 和 Qt5 开发的桌面端正畸分析软件。由于跨平台兼容性问题（尤其是 macOS 的无边框窗口焦点缺陷），我们已经**全面重构并转型为纯前端（WebUI）轻量化架构**。
+> 原有庞大的 Qt UI 代码已被移除，但核心的**C++正畸数学算法**仍保留在 `src/` 目录下，作为开源医学计算的参考资料。
 
-<img src="src/FusionAnalyser/res/dark/images/titlebar/FusionAnalyser.png" alt="FusionAnalyser Logo" width="200"/>
+## 🌟 项目简介
 
-**专业、开源的数字化牙科模型测量分析软件**
+FusionAnalyser 现已成为一个开箱即用的**纯前端数字正畸模型分析系统**。它完全运行在浏览器中，无需安装任何后端服务，也不依赖复杂的运行环境。医生或研究人员可以直接导入口内扫描的 STL 模型，并快速计算关键的正畸临床指标。
 
-[官网](https://www.ai-align.cn/fusionanalyser/) • [快速开始](#构建) • [文档](#使用说明)
+## ✨ 核心功能
 
-[English](./README_EN.md) | 简体中文
+*   **🦷 3D 模型渲染引擎 (基于 Three.js)**
+    *   原生支持导入并渲染高精度的上下颌 `.stl` 模型。
+    *   支持旋转、缩放、平移等全方位查看。
+    *   医疗级的高级暗色系光照和材质渲染。
+*   **📊 Bolton 指数自动分析**
+    *   **前牙比 (Anterior Ratio 3-3)**：自动计算并评判是否在 78.8% 标准范围内。
+    *   **全牙比 (Overall Ratio 6-6)**：自动计算并评判是否在 91.5% 标准范围内。
+    *   精确给出上下颌牙量偏大的具体毫米数。
+*   **📏 拥挤度与间隙评估 (Crowding Analysis)**
+    *   根据输入的牙宽和可用牙弓长度，自动计算模型拥挤度/间隙大小。
+    *   自动分级：散在间隙、正常、I度(轻度)、II度(中度)、III度(重度)拥挤。
+*   **📋 医疗级十字牙列数据表**
+    *   标准的 FDI 牙位排布（18-28, 48-38），支持缺失牙快速标记。
 
-</div>
+## 🚀 快速启动
 
-FusionAnalyser 是一款专业、开源的数字化牙科模型测量分析软件，面向正畸临床场景提供高效、准确的模型分析能力。本软件基于 Qt 和 OpenGL 开发，为正畸医生提供完整的数字化模型分析解决方案。
+得益于纯前端零依赖的架构，你只需要一个简单的 HTTP 静态服务器即可运行本项目。
 
-**源代码仓库**：https://github.com/aialign2025/FusionAnalyser
+1. 克隆本项目：
+   ```bash
+   git clone https://github.com/your-username/FusionAnalyser.git
+   cd FusionAnalyser/orthodontic-analyzer
+   ```
 
-## 软件亮点
+2. 启动任意静态文件服务器（例如使用 macOS 自带的 Python）：
+   ```bash
+   python3 -m http.server 8765
+   ```
 
-- **更简单**：步骤引导的"傻瓜式"操作流程
-- **更精准**：严格遵循教科书定义的测量项目，精准细致的定点测量
-- **更直观**：临床参考值展示、异常值提醒，分析报告清晰完整
-- **更开放**：自由开放的数据接口，兼容各品牌口扫、台扫数字模型
+3. 在浏览器中访问：
+   **http://localhost:8765**
 
-## 构建
+## 📂 目录结构
 
-项目基于 Qt 5 和 OpenGL 开发，支持 Windows 平台。
-
-### 系统要求
-
-- **编译器**: MSVC 2019/2022 (Visual Studio)
-- **Qt**: Qt 5.12+（需包含 QtOpenGL、QtXml、QtXmlPatterns、QtScript、QtNetwork、QtSvg、QtPrintSupport 模块）
-- **vcglib**: Visualization and Computer Graphics Library（必须克隆在项目根目录，与 `src` 同级）
-- **第三方库**（已包含在 `src/external/`）：GLEW、FreeType、jhead、SpdLog、QuaZip、Google Breakpad
-
-### 项目结构
-
+```text
+FusionAnalyser/
+├── orthodontic-analyzer/    # 🎯 全新的纯前端 WebUI 主程序
+│   ├── index.html           # 应用主入口
+│   ├── style.css            # 医疗级深色主题样式
+│   ├── js/
+│   │   ├── main.js          # 事件绑定与初始化
+│   │   ├── viewer.js        # Three.js 3D 渲染引擎
+│   │   ├── analyzer.js      # Bolton / 拥挤度计算逻辑
+│   │   └── ui.js            # 十字牙列表与结果卡片交互
+│   └── example/             # 存放用于测试的本地 STL 演示模型
+│
+└── src/                     # 📚 遗留的 C++ 核心算法库 (仅作参考)
+    ├── common_ext/bolton/   # 原生 Bolton 算法 C++ 实现
+    ├── common_ext/data/     # 原生拥挤度、Spee曲线、磨牙关系算法
+    ├── common_ext/meshExt/  # 牙齿 OBB 包围盒及牙弓曲线拟合逻辑
+    └── common_ext/machine/  # Delaunay、GJK碰撞检测、凸包等3D底层算法
 ```
-fusionalign/
-├── build.bat              # Windows 快速构建脚本
-├── vcglib/                # VCG 库（需手动克隆，与 src 同级）
-├── src/
-│   ├── external/          # 第三方库
-│   ├── common_base/       # 基础工具库
-│   ├── common/            # 核心框架
-│   ├── common_ext/        # 牙科扩展功能
-│   ├── UI_Common/         # 共享 UI 组件
-│   ├── FusionAnalyser/    # 主应用程序
-│   ├── sampleplugins/     # 牙科分析插件
-│   └── distrib/           # 构建输出目录
-└── LICENSE.txt
-```
 
-### 构建步骤
-
-1. 确保已安装 Visual Studio 2019/2022 和 Qt 5.15.2
-2. 克隆 vcglib 到项目根目录：
-   ```cmd
-   git clone https://github.com/cnr-isti-vclab/vcglib.git
-   ```
-3. 修改 `build.bat` 中的 Qt 路径（如需要）：
-   ```bat
-   set QT_DIR=D:\Qt\5.15.2\msvc2019_64
-   ```
-4. 运行构建脚本：
-   ```cmd
-   build.bat
-   ```
-5. 清理重建（可选）：
-   ```cmd
-   build.bat clean
-   ```
-
-**输出位置：**
-- Release 版本：`src\distrib\FusionAnalyser.exe`
-- Debug 版本：`src\distribD\FusionAnalyser.exe`
-- 插件目录：`src\distrib\plugins\`
-
-
-## 技术架构
-
-FusionAnalyser 采用插件式架构设计，包含以下主要模块：
-
-- **主应用程序**：FusionAnalyser（3D 渲染视口和用户界面）
-- **核心插件**：测量分析、模型标记、渲染装饰、文件导入/导出
-- **公共库**：基础工具、3D 处理库、牙科扩展、UI 组件
-
-## 许可证
-
-本项目使用 **GNU General Public License v3.0**（GPL v3）
-
-- 详见 `LICENSE.txt` 文件
-- 第三方库许可证详见 `THIRD_PARTY_LICENSES.md`
-
-## 联系方式
-
-- **官方网站**：https://www.ai-align.cn/fusionanalyser/
-- **源代码仓库**：https://github.com/aialign2025/FusionAnalyser
-- **问题反馈**：[GitHub Issues](https://github.com/aialign2025/FusionAnalyser/issues)
-
----
-
-**注意**：本软件仅供研究和教学使用，临床诊断请咨询专业医生。
+## 📜 许可证协议
+本项目基于原始开源协议发布（详见 `LICENSE` 文件）。所有新重构的 WebUI 代码遵循相同的开源精神。
