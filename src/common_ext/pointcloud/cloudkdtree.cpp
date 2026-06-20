@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -1857,12 +1857,12 @@ int CloudOctree::findNearestNodeWith(Point3m _pos)
 {
 	if (this->kdtree_ == nullptr)
 	{
-		vector<Point3m> points;
+		this->kdtree_points_.clear();
 		for (auto& node : node_cloud_)
 		{
-			points.push_back(node.pos());
+			this->kdtree_points_.push_back(node.pos());
 		}
-		this->kdtree_ = new KdTree<float>(points);
+		this->kdtree_ = new KdTree<float>(vcg::ConstDataWrapper<Point3m>(this->kdtree_points_.data(), this->kdtree_points_.size()));
 	}
 
 	typename KdTree<float>::PriorityQueue pq;

@@ -1,9 +1,0 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource prefix="/licenses">
-        <file>licenses/lgpl_v3.txt</file>
-        <file>licenses/gpl_v3.txt</file>
-        <file>licenses/mit.txt</file>
-    </qresource>
-</RCC>
-

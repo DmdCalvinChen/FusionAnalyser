@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -45,17 +45,17 @@ void CloudSurfaceReconstruction::initalKdTree()
 	{
 		return;
 	}
-	vector<Point3m> points;
+	this->kdtree_points_.clear();
 	for (int i = 0; i < p_nodes_->size(); ++i)
 	{
-		points.push_back(p_nodes_->at(i).pos());
+		this->kdtree_points_.push_back(p_nodes_->at(i).pos());
 	}
 	if (this->kt_ != nullptr)
 	{
 		delete this->kt_;
 		this->kt_ = nullptr;
 	}
-	this->kt_ = new KdTree<float>(points);
+	this->kt_ = new KdTree<float>(vcg::ConstDataWrapper<Point3m>(this->kdtree_points_.data(), this->kdtree_points_.size()));
 }
 
 vector<int> CloudSurfaceReconstruction::collectNearsetVertIndexs(Point3m &_p, int &_size)

@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -187,6 +187,7 @@ public:
 	std::future<bool> handler;
 
 	KdTree<float> *kdtree_ = nullptr;
+	vector<Point3m> kdtree_points_;
 
 	CMeshO* fitting_mesh_ = nullptr;
 

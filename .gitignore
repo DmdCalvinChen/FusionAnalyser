@@ -123,3 +123,9 @@ Makefile.*
 .claude/settings.local.json
 /.claude
 src/common_ext/.\!6518\!Makefile
+
+# Ignore STL and patient data
+*.stl
+OrthoCAD_Export_*/
+orthodontic-analyzer/example/
+

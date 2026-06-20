@@ -365,7 +365,7 @@ EvolveResult GJKMachine::evolveSimplex2()
 	{
 		return EvolveResult::FOUNDINTERSCTION;
 	}
-	if (curDiff < EPSILON)
+	if (curDiff < GJK_EPSILON)
 	{
 		return EvolveResult::NOINTERSECTION;
 	}
@@ -518,7 +518,7 @@ FEdge GJKMachine::epaFilterCloestEdge(vector<MinkowskiDiff> initalVertsList, boo
 			this->newVert = tempNewVert;
 
 			float newDistance = abs(tempNewVert.diff * curOpeTriangle->normal);
-			if (abs(newDistance - curOpeTriangle->distanceToOrigin) < EPSILON)
+			if (abs(newDistance - curOpeTriangle->distanceToOrigin) < GJK_EPSILON)
 			{
 				////->Ϊҵ
 				result = FEdge(tempNewVert.sourceA, tempNewVert.sourceB);
@@ -585,7 +585,7 @@ FEdge GJKMachine::testEpaSingleStep()
 			this->curDirection = curOpeTriangle->normal;
 			this->newVert = tempNewVert;
 			float newDistance = abs(tempNewVert.diff * curOpeTriangle->normal);
-			if (abs(newDistance - curOpeTriangle->distanceToOrigin) < EPSILON)
+			if (abs(newDistance - curOpeTriangle->distanceToOrigin) < GJK_EPSILON)
 			{
 				////->Ϊҵ
 				result = FEdge(tempNewVert.sourceA, tempNewVert.sourceB);

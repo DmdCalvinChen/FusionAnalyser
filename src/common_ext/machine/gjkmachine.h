@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -24,7 +24,7 @@
 #ifndef COMMON_GJKMACHINE_H
 #define COMMON_GJKMACHINE_H
 
-#define EPSILON 0.0001f
+#define GJK_EPSILON 0.0001f
 #define MIN_CONTACT_PIERCING_DEPTH -0.01f
 #define MAX_PERMISSIBLE_PIERCING_DEPTH 0.5f
 #define EFFECTIVE_CREVICE_WIDTH 100

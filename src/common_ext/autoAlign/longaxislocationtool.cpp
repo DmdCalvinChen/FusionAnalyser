@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -188,7 +188,7 @@ void LongAxisLocationTool::initalKdTree()
 	{
 		return;
 	}
-	this->kt_ = new KdTree<float>(points);
+	this->kt_ = new KdTree<float>(vcg::VectorConstDataWrapper<std::vector<Point3m> >(points));
 	vector<Point3m>().swap(points);
 }
 

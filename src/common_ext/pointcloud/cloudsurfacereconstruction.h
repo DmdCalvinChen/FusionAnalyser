@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -39,6 +39,7 @@ public:
 protected:
 	vector<CloudNode> *p_nodes_ = nullptr;
 	KdTree<float> *kt_ = nullptr;
+	vector<Point3m> kdtree_points_;
 };
 
 #endif // ! CLOUD_SURFACE_RECONSTRUCTION_H

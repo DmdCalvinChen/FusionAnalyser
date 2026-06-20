@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数字正畸分析 WebUI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">🦷</div>
+    <h1>数字正畸模型分析系统</h1>
+  </header>
+
+  <main class="container">
+    <!-- Left: 3D Viewer -->
+    <section class="viewer-section">
+      <div class="viewer-header">
+        <h2>3D 模型视图</h2>
+        <div class="viewer-controls">
+          <label class="custom-file-upload">
+            <input type="file" id="upload-upper" accept=".stl">
+            加载上颌 STL
+          </label>
+          <label class="custom-file-upload">
+            <input type="file" id="upload-lower" accept=".stl">
+            加载下颌 STL
+          </label>
+          <button id="btn-toggle-upper" class="toggle-btn active">显示上颌</button>
+          <button id="btn-toggle-lower" class="toggle-btn active">显示下颌</button>
+          <button id="btn-reset-view">重置视图</button>
+          <button id="btn-load-demo" class="demo-btn">加载演示数据</button>
+        </div>
+      </div>
+      <div id="viewer-container">
+        <div id="loading-overlay" class="hidden">
+          <div class="spinner"></div>
+          <p>正在加载模型...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Analysis Panel -->
+    <section class="analysis-section">
+      <div class="analysis-card">
+        <div class="card-header">
+          <h2>测量结果数据表</h2>
+          <button id="btn-calculate" class="calculate-btn-small">重新计算</button>
+        </div>
+        
+        <div class="data-table-container">
+          <table class="tooth-data-table">
+            <thead>
+              <tr>
+                <th colspan="8" class="text-right">右侧 (Right)</th>
+                <th class="divider"></th>
+                <th colspan="8" class="text-left">左侧 (Left)</th>
+              </tr>
+              <tr class="fdi-header">
+                <th>18</th><th>17</th><th>16</th><th>15</th><th>14</th><th>13</th><th>12</th><th>11</th>
+                <th class="divider">上颌</th>
+                <th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th>
+              </tr>
+            </thead>
+            <tbody id="upper-teeth-row">
+              <!-- upper jaw inputs go here via JS -->
+            </tbody>
+            <thead>
+              <tr class="fdi-header">
+                <th>48</th><th>47</th><th>46</th><th>45</th><th>44</th><th>43</th><th>42</th><th>41</th>
+                <th class="divider">下颌</th>
+                <th>31</th><th>32</th><th>33</th><th>34</th><th>35</th><th>36</th><th>37</th><th>38</th>
+              </tr>
+            </thead>
+            <tbody id="lower-teeth-row">
+              <!-- lower jaw inputs go here via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="arch-length-container">
+          <div class="arch-length-item">
+            <label>上颌骨弓长(mm):</label>
+            <input type="number" id="upper-arch-length" class="clean-input" step="0.1" value="85.0">
+          </div>
+          <div class="arch-length-item">
+            <label>下颌骨弓长(mm):</label>
+            <input type="number" id="lower-arch-length" class="clean-input" step="0.1" value="75.0">
+          </div>
+        </div>
+      </div>
+
+      <div class="results-container">
+        <!-- Bolton Anterior -->
+        <div class="result-card" id="card-bolton-anterior">
+          <h3>Bolton 前牙比 (3-3)</h3>
+          <div class="result-value">
+            <span class="value">--</span>%
+            <span class="status-badge">未计算</span>
+          </div>
+          <p class="result-detail">标准值: 78.8% | 正常范围: 77.08% - 80.52%</p>
+          <p class="result-message"></p>
+        </div>
+
+        <!-- Bolton Overall -->
+        <div class="result-card" id="card-bolton-overall">
+          <h3>Bolton 全牙比 (6-6)</h3>
+          <div class="result-value">
+            <span class="value">--</span>%
+            <span class="status-badge">未计算</span>
+          </div>
+          <p class="result-detail">标准值: 91.5% | 正常范围: 89.99% - 93.01%</p>
+          <p class="result-message"></p>
+        </div>
+
+        <!-- Upper Crowding -->
+        <div class="result-card" id="card-crowding-upper">
+          <h3>上颌拥挤度</h3>
+          <div class="result-value">
+            <span class="value">--</span>mm
+            <span class="status-badge">未计算</span>
+          </div>
+          <p class="result-message"></p>
+        </div>
+
+        <!-- Lower Crowding -->
+        <div class="result-card" id="card-crowding-lower">
+          <h3>下颌拥挤度</h3>
+          <div class="result-value">
+            <span class="value">--</span>mm
+            <span class="status-badge">未计算</span>
+          </div>
+          <p class="result-message"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

@@ -13,7 +13,7 @@ CONFIG += c++11
 QT += xml gui opengl script network svg sql
 
 # macOS configuration
-macx:INCLUDEPATH += .. $$VCGDIR $$GLEWDIR/include $$COMMON_BASE $$SPDLOG/include $$UI_COMMONDIR
+macx:INCLUDEPATH += .. $$VCGDIR $$EIGENDIR $$GLEWDIR/include $$COMMON_BASE $$SPDLOG/include $$UI_COMMONDIR
 macx:LIBS += -L../distrib/ -lcommon -lcommon_base
 macx:DESTDIR = ../distrib
 

@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -107,7 +107,12 @@ class CFaceO;
 // Declaration of the semantic of the used types
 class CUsedTypesO: public vcg::UsedTypes < vcg::Use<CVertexO>::AsVertexType,
     vcg::Use<CEdgeO   >::AsEdgeType,
-    vcg::Use<CFaceO  >::AsFaceType >{};
+    vcg::Use<CFaceO  >::AsFaceType >{
+public:
+    typedef CVertexO VertexType;
+    typedef CEdgeO EdgeType;
+    typedef CFaceO FaceType;
+};
 
 // The Main Vertex Class
 // Most of the attributes are optional and must be enabled before use.

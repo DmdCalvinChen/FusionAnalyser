@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -2269,7 +2269,7 @@ std::vector<vcg::Point3f> UtilityTools::sortBorderVertexs(const std::vector<vcg:
 		return border_sorted;
 	}
 
-	KdTree<float>* kt = new KdTree<float>(pos_points);
+	KdTree<float>* kt = new KdTree<float>(vcg::ConstDataWrapper<vcg::Point3f>(pos_points.data(), pos_points.size()));
 
 	if (kt == nullptr)
 	{
@@ -2460,7 +2460,7 @@ vector<FEdge> UtilityTools::getIntersectionRingOfTwoMesh(CMeshO* _mesh_a, CMeshO
 		Point3m temp_center = (_mesh_b->face[i].V(0)->P() + _mesh_b->face[i].V(1)->P() + _mesh_b->face[i].V(2)->P()) / 3.0f;
 		mesh_b_face_center_list.push_back(temp_center);
 	}
-	KdTree<float> kt(mesh_b_face_center_list);
+	KdTree<float> kt(vcg::ConstDataWrapper<Point3m>(mesh_b_face_center_list.data(), mesh_b_face_center_list.size()));
 
 	FEdge intersect_edge;
 	bool start_index_intersected = intersectFaceWithMesh(_istart, _mesh_a, _mesh_b, kt, intersect_edge);
