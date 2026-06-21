@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -30,13 +30,13 @@
 #define CONE_WIDTH 1.0f
 #define ZOOM_CONE_WIDTH 0.2f
 
+#include "common/ml_mesh_type.h"
 #include <GL/glew.h>
 #include <wrap/gl/math.h>
 #include <wrap/gl/pick.h>
 #include <wrap/gui/trackball.h>
 #include <wrap/gl/addons.h>
 #include <wrap/gl/trimesh.h>
-#include "common/ml_mesh_type.h"
 
 #include "common_ext_global.h"
 

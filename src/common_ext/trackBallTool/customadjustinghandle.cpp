@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -121,7 +121,7 @@ Point3m* CustomAdjustingHandle::getAxisVector(AdjDirect _direct)
 		return &obj_->realTimeAxis.axisZVector;
 
 	default:
-		break;
+		return nullptr;
 	}
 }
 
