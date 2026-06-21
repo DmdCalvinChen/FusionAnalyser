@@ -80,24 +80,14 @@ export class UI {
     let lowerMolarWidth = parseFloat(document.getElementById('lower-molar-width').value);
     let speeDepth = parseFloat(document.getElementById('lower-spee-depth').value);
 
-    // Fallback to auto-computed metrics from 3D model if inputs are empty
-    if (this.viewer) {
-      const metrics = this.viewer.computeMetrics();
-      if (isNaN(upperArch) && metrics.upper) upperArch = metrics.upper.archLength;
-      if (isNaN(lowerArch) && metrics.lower) lowerArch = metrics.lower.archLength;
-      if (isNaN(upperMolarWidth) && metrics.upper) upperMolarWidth = metrics.upper.molarWidth;
-      if (isNaN(lowerMolarWidth) && metrics.lower) lowerMolarWidth = metrics.lower.molarWidth;
-      if (isNaN(speeDepth) && metrics.lower) speeDepth = metrics.lower.speeDepth;
-    }
-
     return { 
       upperWidths, 
       lowerWidths, 
-      upperArchLength: upperArch || 0, 
-      lowerArchLength: lowerArch || 0,
-      upperMolarWidth: upperMolarWidth || 0,
-      lowerMolarWidth: lowerMolarWidth || 0,
-      speeDepth: speeDepth || 0
+      upperArchLength: isNaN(upperArch) ? 0 : upperArch, 
+      lowerArchLength: isNaN(lowerArch) ? 0 : lowerArch,
+      upperMolarWidth: isNaN(upperMolarWidth) ? 0 : upperMolarWidth,
+      lowerMolarWidth: isNaN(lowerMolarWidth) ? 0 : lowerMolarWidth,
+      speeDepth: isNaN(speeDepth) ? 0 : speeDepth
     };
   }
 
@@ -199,7 +189,8 @@ export class UI {
           // For now, since the Python server runs locally, we can just pass a flag to tell it to process the local example STLs
           // if we don't pass base64. Let's pass the base64 if we can, or just tell the server to load the local files.
           upper_stl_b64: window.upperStlBase64 || "",
-          lower_stl_b64: window.lowerStlBase64 || ""
+          lower_stl_b64: window.lowerStlBase64 || "",
+          metrics: this.collectData()
         })
       });
 
@@ -242,6 +233,33 @@ export class UI {
           const inp = document.getElementById('lower-spee-depth');
           if (inp) inp.value = data.spee_depth.toFixed(1);
         }
+        
+        this.backendResults = {
+            boltonAnterior: {
+                ratio: parseFloat(data.bolton_anterior) || 0,
+                status: 'normal',
+                levelStr: data.bolton_anterior,
+                message: '基于 C++ 后端 BoltonAna 类'
+            },
+            boltonOverall: {
+                ratio: parseFloat(data.bolton_overall) || 0,
+                status: 'normal',
+                levelStr: data.bolton_overall,
+                message: '基于 C++ 后端 BoltonAna 类'
+            },
+            upperCrowding: {
+                value: parseFloat(data.upper_crowding) || 0,
+                status: data.upper_crowding.includes('III') ? 'abnormal' : (data.upper_crowding.includes('II') ? 'warning' : (data.upper_crowding.includes('I') ? 'warning' : 'normal')),
+                levelStr: data.upper_crowding,
+                message: '基于 C++ 后端 DentalAnalysisData 类'
+            },
+            lowerCrowding: {
+                value: parseFloat(data.lower_crowding) || 0,
+                status: data.lower_crowding.includes('III') ? 'abnormal' : (data.lower_crowding.includes('II') ? 'warning' : (data.lower_crowding.includes('I') ? 'warning' : 'normal')),
+                levelStr: data.lower_crowding,
+                message: '基于 C++ 后端 DentalAnalysisData 类'
+            }
+        };
       } else {
         alert("后端计算错误: " + res.message);
       }
@@ -261,6 +279,15 @@ export class UI {
   performAnalysisLocal() {
     const data = this.collectData();
     const results = this.analyzer.calculate(data);
+    
+    // Override the js calculated results with the backend true results
+    if (this.backendResults) {
+        results.boltonAnterior = this.backendResults.boltonAnterior;
+        results.boltonOverall = this.backendResults.boltonOverall;
+        results.upperCrowding = this.backendResults.upperCrowding;
+        results.lowerCrowding = this.backendResults.lowerCrowding;
+    }
+
     this.renderResults(results);
   }
 

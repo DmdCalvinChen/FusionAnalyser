@@ -48,11 +48,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 else:
                     lower_path_vm = "/home/ubuntu/fusionanalyser/orthodontic-analyzer/example/lower.stl"
 
+                # Read metrics if provided
+                metrics = payload.get('metrics', {})
+                metrics_path_mac = os.path.join(temp_dir, "metrics.json")
+                with open(metrics_path_mac, "w") as f:
+                    json.dump(metrics, f)
+                metrics_path_vm = "/home/ubuntu/fusionanalyser/orthodontic-analyzer/temp/metrics.json"
+
                 # ==========================================
                 # Call the C++ Engine via Multipass
                 # ==========================================
                 
-                engine_cmd = f"export LD_LIBRARY_PATH=/home/ubuntu/fusionanalyser/src/distrib:$LD_LIBRARY_PATH && /home/ubuntu/fusionanalyser/orthodontic-analyzer/backend_engine --upper {upper_path_vm} --lower {lower_path_vm}"
+                engine_cmd = f"export LD_LIBRARY_PATH=/home/ubuntu/fusionanalyser/src/distrib:$LD_LIBRARY_PATH && /home/ubuntu/fusionanalyser/orthodontic-analyzer/backend_engine --metrics {metrics_path_vm}"
                 
                 cmd = ["multipass", "exec", "fusion", "--", "bash", "-c", engine_cmd]
                 print(f"Executing: {' '.join(cmd)}")
@@ -61,10 +68,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 if result.returncode != 0:
                     raise Exception(f"C++ 引擎崩溃或报错: {result.stderr}")
                     
-                # We expect the C++ engine to print pure JSON to stdout
+                # We expect the C++ engine to print pure JSON to stdout, but it might have qDebug output
                 try:
-                    engine_data = json.loads(result.stdout)
-                except json.JSONDecodeError:
+                    json_str = result.stdout[result.stdout.find('{'):]
+                    engine_data = json.loads(json_str)
+                except Exception as e:
                     raise Exception(f"C++ 引擎输出不是有效的 JSON: {result.stdout}")
 
                 response = {
