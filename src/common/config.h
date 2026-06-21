@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -138,7 +138,7 @@ enum EditItemIndex {
     BASAL_BONE_ARCH
 };
 
-#elif PLATFORM_IOS
+#else
 
 enum EditItemIndex: int {
     NONE = -1,

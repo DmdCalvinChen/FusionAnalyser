@@ -128,7 +128,6 @@ class CVertexO  : public vcg::Vertex< CUsedTypesO,
     vcg::vertex::VFAdjOcf,          /*  0b */
     vcg::vertex::MarkOcf,           /*  0b */
     vcg::vertex::TexCoordfOcf,      /*  0b */
-    vcg::vertex::CurvaturefOcf,     /*  0b */
     vcg::vertex::CurvatureDirmOcf,  /*  0b */
     vcg::vertex::RadiusmOcf         /*  0b */
 >{

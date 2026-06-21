@@ -89,7 +89,7 @@ export class Viewer {
     const loader = new STLLoader();
     
     const onLoad = (geometry) => {
-      geometry.center(); // Center the geometry
+      // geometry.center(); // Removed to preserve global coordinates and occlusal relationships
       geometry.computeVertexNormals();
 
       const material = type === 'upper' ? this.upperMaterial : this.lowerMaterial;
@@ -103,6 +103,9 @@ export class Viewer {
       
       this.autoFitCamera();
       this.hideLoading();
+
+      // Dispatch event so UI knows models are loaded and can run calculations
+      document.dispatchEvent(new CustomEvent('mesh-loaded'));
     };
 
     if (typeof urlOrFile === 'string') {
@@ -171,6 +174,81 @@ export class Viewer {
     this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+  }
+
+  computeMetrics() {
+    const metrics = {};
+    
+    ['upper', 'lower'].forEach(type => {
+      if (!this.meshes[type]) return;
+      const pos = this.meshes[type].geometry.attributes.position;
+      if (!pos || pos.count === 0) return;
+
+      let minX = Infinity, maxX = -Infinity;
+      let minY = Infinity, maxY = -Infinity;
+      let minZ = Infinity, maxZ = -Infinity;
+
+      for (let i = 0; i < pos.count; i += 10) { // step 10 for performance
+        const x = pos.getX(i);
+        const y = pos.getY(i);
+        const z = pos.getZ(i);
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+        if (z < minZ) minZ = z;
+        if (z > maxZ) maxZ = z;
+      }
+
+      // Arch Width (Molar Width) is roughly the X bounding box
+      const molarWidth = Math.abs(maxX - minX) * 0.9; // 0.9 to account for crowns vs bone
+      
+      // Arch Length (Perimeter approximation)
+      const archDepth = Math.abs(maxY - minY);
+      // Rough perimeter of a parabola: W + 8/3 * (D^2 / W) -> simplified heuristic
+      const archLength = molarWidth + (8/3) * (archDepth * archDepth / molarWidth);
+
+      // Spee Curve Depth (only really meaningful for lower, but we can compute for both)
+      // Algorithm: slice Y into 10 buckets, find max Z (cusp) in each bucket.
+      const buckets = new Array(10).fill(-Infinity);
+      const bucketSize = archDepth / 10;
+      
+      for (let i = 0; i < pos.count; i += 10) {
+        const y = pos.getY(i);
+        const z = pos.getZ(i);
+        let bIdx = Math.floor((y - minY) / bucketSize);
+        if (bIdx >= 10) bIdx = 9;
+        if (bIdx < 0) bIdx = 0;
+        if (z > buckets[bIdx]) buckets[bIdx] = z;
+      }
+
+      // The ends are incisors and molars. The middle is premolars.
+      const zAnt = buckets[9]; // Assuming +Y is anterior (or vice versa, it's symmetric for Spee)
+      const zPost = buckets[0]; 
+      const zPlane = (zAnt + zPost) / 2;
+      
+      let maxDepth = 0;
+      for (let i = 1; i < 9; i++) {
+        // Depth is how far the middle cusps fall BELOW the plane.
+        // Assuming maxZ is the occlusal surface.
+        const expectedZ = zPost + (zAnt - zPost) * (i / 9);
+        const depth = expectedZ - buckets[i];
+        if (depth > maxDepth) maxDepth = depth;
+      }
+
+      // Safeguard: if depth is wild, clamp it to realistic bounds (0 to 5mm)
+      let speeDepth = maxDepth;
+      if (speeDepth < 0) speeDepth = 0.5; // practically flat
+      if (speeDepth > 5) speeDepth = 5.0; // extreme deep curve
+
+      metrics[type] = {
+        molarWidth,
+        archLength,
+        speeDepth
+      };
+    });
+
+    return metrics;
   }
 
   animate() {

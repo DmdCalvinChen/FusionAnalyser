@@ -89,6 +89,47 @@ export class Analyzer {
       results.lowerCrowding = null;
     }
 
+    // 5. Arch Dimensions (Simple tracking)
+    if (data.upperMolarWidth > 0 && data.lowerMolarWidth > 0) {
+      let status = 'normal';
+      let message = '已记录基础宽度数据';
+      results.archDimensions = {
+        value: 0,
+        status: status,
+        levelStr: '已测定',
+        message: message,
+        upperMsg: `宽 ${data.upperMolarWidth.toFixed(1)}mm, 长 ${data.upperArchLength.toFixed(1)}mm`,
+        lowerMsg: `宽 ${data.lowerMolarWidth.toFixed(1)}mm, 长 ${data.lowerArchLength.toFixed(1)}mm`,
+        upperMolarWidth: data.upperMolarWidth,
+        upperArchLength: data.upperArchLength,
+        lowerMolarWidth: data.lowerMolarWidth,
+        lowerArchLength: data.lowerArchLength
+      };
+    } else {
+      results.archDimensions = null;
+    }
+
+    // 6. Spee Curve Analysis
+    if (data.speeDepth > 0) {
+      let status = 'normal';
+      let levelStr = '正常';
+      let message = 'Spee 曲线深度适中';
+
+      if (data.speeDepth < 1.5) {
+        status = 'warning';
+        levelStr = '曲线平缓';
+        message = 'Spee 曲线较平，可能存在开合倾向或后牙早接触';
+      } else if (data.speeDepth > 2.5) {
+        status = 'abnormal';
+        levelStr = '曲线过深';
+        message = 'Spee 曲线过深，常伴随深覆合，可能需要压低前牙或升高后牙';
+      }
+
+      results.speeCurve = { value: data.speeDepth, status, levelStr, message };
+    } else {
+      results.speeCurve = null;
+    }
+
     return results;
   }
 

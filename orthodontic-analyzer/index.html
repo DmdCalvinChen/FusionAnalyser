@@ -90,6 +90,18 @@
             <label>下颌骨弓长(mm):</label>
             <input type="number" id="lower-arch-length" class="clean-input" step="0.1" value="75.0">
           </div>
+          <div class="arch-length-item">
+            <label>上颌磨牙间宽(mm):</label>
+            <input type="number" id="upper-molar-width" class="clean-input" step="0.1" placeholder="-">
+          </div>
+          <div class="arch-length-item">
+            <label>下颌磨牙间宽(mm):</label>
+            <input type="number" id="lower-molar-width" class="clean-input" step="0.1" placeholder="-">
+          </div>
+          <div class="arch-length-item">
+            <label>下颌 Spee曲线深度(mm):</label>
+            <input type="number" id="lower-spee-depth" class="clean-input" step="0.1" placeholder="-">
+          </div>
         </div>
       </div>
 
@@ -135,6 +147,31 @@
           </div>
           <p class="result-message"></p>
         </div>
+
+        <!-- Arch Dimensions -->
+        <div class="result-card" id="card-arch-dimensions">
+          <h3>牙弓宽度与长度</h3>
+          <div class="result-value">
+            <span class="value">--</span>
+            <span class="status-badge">未计算</span>
+          </div>
+          <p class="result-detail">上颌: -- | 下颌: --</p>
+          <div style="text-align: center; margin-top: 15px;">
+             <canvas id="arch-curve-canvas" width="220" height="140" style="background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px dashed #ccc; display: none;"></canvas>
+          </div>
+          <p class="result-message"></p>
+        </div>
+
+        <!-- Spee Curve -->
+        <div class="result-card" id="card-spee-curve">
+          <h3>下颌 Spee 曲线分析</h3>
+          <div class="result-value">
+            <span class="value">--</span>mm
+            <span class="status-badge">未计算</span>
+          </div>
+          <p class="result-detail">正常参考值: 1.5 - 2.5 mm</p>
+          <p class="result-message"></p>
+        </div>
       </div>
     </section>
   </main>
@@ -147,6 +184,6 @@
       }
     }
   </script>
-  <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/main.js?v=10"></script>
 </body>
 </html>

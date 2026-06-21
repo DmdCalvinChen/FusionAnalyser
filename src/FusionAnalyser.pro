@@ -7,24 +7,10 @@ CONFIG += ordered
 # Core libraries - built first
 SUBDIRS = common_base \
           common \
-          common_ext \
-          UI_Common
+          common_ext
 
-# Sample plugins
-SUBDIRS += sampleplugins/EditMeasureAnaPlugin \
-           sampleplugins/EditModelMarkPlugin \
-           sampleplugins/decorateFusionPlugin \
-           sampleplugins/overlay
+# Backend Engine Application
+SUBDIRS += backend_engine
 
-# IO plugins
-SUBDIRS += meshlabplugins/io_base
-
-# Main application - built last
-SUBDIRS += FusionAnalyser
-				
-# Platform-specific subdirectory settings
-win32-msvc:FusionAnalyser.subdir = FusionAnalyser
-macx:FusionAnalyser.subdir = FusionAnalyser
-
-# Build dependencies - FusionAnalyser requires UI_Common to be built first
-FusionAnalyser.depends = UI_Common
+# Build dependencies
+backend_engine.depends = common_ext

@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -720,8 +720,8 @@ bool TrackBallTool::pickHandle(int x, int y, int& indexPicked)
 			}
 			glLoadName(i);
 
-			vcg::Add_Ons::glCuboid<vcg::Add_Ons::DMSolid>(translateHandlesTemp[i].first,
-				translateHandlesTemp[i].second, cuboid_length, cuboid_width, cuboid_height);
+// vcg::Add_Ons::glCuboid<vcg::Add_Ons::DMSolid>(translateHandlesTemp[i].first,
+// translateHandlesTemp[i].second, cuboid_length, cuboid_width, cuboid_height);
 
 		}
 
@@ -797,8 +797,8 @@ void TrackBallTool::drawIsAdjustingLocalToothAxis()
 				glColor3f(0, 1, 0);
 			}
 
-			vcg::Add_Ons::glCuboid<vcg::Add_Ons::DMSolid>(translateHandlesTemp[i].first,
-				translateHandlesTemp[i].second, cuboid_length, cuboid_width, cuboid_height);
+// vcg::Add_Ons::glCuboid<vcg::Add_Ons::DMSolid>(translateHandlesTemp[i].first,
+// translateHandlesTemp[i].second, cuboid_length, cuboid_width, cuboid_height);
 
 		}
 

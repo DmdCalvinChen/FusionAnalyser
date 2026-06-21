@@ -1,6 +1,7 @@
 export class UI {
-  constructor(analyzer) {
+  constructor(analyzer, viewer) {
     this.analyzer = analyzer;
+    this.viewer = viewer;
     
     // Tooth arrays (FDI standard)
     this.upperTeeth = ['18','17','16','15','14','13','12','11', '21','22','23','24','25','26','27','28'];
@@ -73,10 +74,31 @@ export class UI {
       if (input.value) lowerWidths[input.dataset.fdi] = parseFloat(input.value);
     });
 
-    const upperArch = parseFloat(document.getElementById('upper-arch-length').value) || 0;
-    const lowerArch = parseFloat(document.getElementById('lower-arch-length').value) || 0;
+    let upperArch = parseFloat(document.getElementById('upper-arch-length').value);
+    let lowerArch = parseFloat(document.getElementById('lower-arch-length').value);
+    let upperMolarWidth = parseFloat(document.getElementById('upper-molar-width').value);
+    let lowerMolarWidth = parseFloat(document.getElementById('lower-molar-width').value);
+    let speeDepth = parseFloat(document.getElementById('lower-spee-depth').value);
 
-    return { upperWidths, lowerWidths, upperArchLength: upperArch, lowerArchLength: lowerArch };
+    // Fallback to auto-computed metrics from 3D model if inputs are empty
+    if (this.viewer) {
+      const metrics = this.viewer.computeMetrics();
+      if (isNaN(upperArch) && metrics.upper) upperArch = metrics.upper.archLength;
+      if (isNaN(lowerArch) && metrics.lower) lowerArch = metrics.lower.archLength;
+      if (isNaN(upperMolarWidth) && metrics.upper) upperMolarWidth = metrics.upper.molarWidth;
+      if (isNaN(lowerMolarWidth) && metrics.lower) lowerMolarWidth = metrics.lower.molarWidth;
+      if (isNaN(speeDepth) && metrics.lower) speeDepth = metrics.lower.speeDepth;
+    }
+
+    return { 
+      upperWidths, 
+      lowerWidths, 
+      upperArchLength: upperArch || 0, 
+      lowerArchLength: lowerArch || 0,
+      upperMolarWidth: upperMolarWidth || 0,
+      lowerMolarWidth: lowerMolarWidth || 0,
+      speeDepth: speeDepth || 0
+    };
   }
 
   performAnalysis() {
@@ -129,22 +151,166 @@ export class UI {
     updateCard('card-bolton-overall', res.boltonOverall, true);
     updateCard('card-crowding-upper', res.upperCrowding, false);
     updateCard('card-crowding-lower', res.lowerCrowding, false);
+    
+    // Arch Dimensions is special
+    const archCard = document.getElementById('card-arch-dimensions');
+    if (res.archDimensions) {
+      updateCard('card-arch-dimensions', res.archDimensions, false);
+      archCard.querySelector('.value').innerText = '展示';
+      archCard.querySelector('.result-detail').innerText = `上颌: ${res.archDimensions.upperMsg} | 下颌: ${res.archDimensions.lowerMsg}`;
+      
+      this.drawArchCurve(
+        res.archDimensions.upperMolarWidth, res.archDimensions.upperArchLength,
+        res.archDimensions.lowerMolarWidth, res.archDimensions.lowerArchLength
+      );
+    } else {
+      updateCard('card-arch-dimensions', null, false);
+      archCard.querySelector('.result-detail').innerText = '上颌: -- | 下颌: --';
+      const canvas = document.getElementById('arch-curve-canvas');
+      if (canvas) canvas.style.display = 'none';
+    }
+
+    updateCard('card-spee-curve', res.speeCurve, false);
   }
 
-  loadDemoData() {
-    // Some sensible defaults that would yield a slight crowding and normal bolton
-    const upper = [0, 0, 10.5, 7.0, 7.5, 8.0, 7.0, 8.5, 8.5, 7.0, 8.0, 7.5, 7.0, 10.5, 0, 0];
-    const lower = [0, 0, 11.0, 7.5, 7.5, 7.0, 6.0, 5.5, 5.5, 6.0, 7.0, 7.5, 7.5, 11.0, 0, 0];
+  async loadDemoData() {
+    // We now rely on the Python backend API to perform real 3D segmentation (via C++)
+    // Clear all inputs first
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(inp => inp.value = '');
     
-    const upInputs = document.querySelectorAll('.upper-input');
-    const lowInputs = document.querySelectorAll('.lower-input');
+    // We do not call performAnalysis here directly because we need the viewer to load the STLs
+    // The main.js will call viewer.loadSTL, and when 'mesh-loaded' fires, we will trigger the API.
+  }
 
-    upInputs.forEach((inp, i) => { if (upper[i]) inp.value = upper[i]; });
-    lowInputs.forEach((inp, i) => { if (lower[i]) inp.value = lower[i]; });
+  async fetchBackendData(upperFile, lowerFile) {
+    try {
+      const btn = document.getElementById('btn-calculate');
+      const origText = btn.innerText;
+      btn.innerText = '计算中...';
+      btn.disabled = true;
 
-    document.getElementById('upper-arch-length').value = 92.5; // Slightly less than needed
-    document.getElementById('lower-arch-length').value = 85.0; // Slightly less than needed
+      // Ensure viewer has meshes loaded to get base64
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          // In a real app, we would extract the STL binary or base64 from the viewer or file input.
+          // For now, since the Python server runs locally, we can just pass a flag to tell it to process the local example STLs
+          // if we don't pass base64. Let's pass the base64 if we can, or just tell the server to load the local files.
+          upper_stl_b64: window.upperStlBase64 || "",
+          lower_stl_b64: window.lowerStlBase64 || ""
+        })
+      });
 
-    this.performAnalysis();
+      const res = await response.json();
+      
+      if (res.status === 'success') {
+        const data = res.data;
+        // Populate inputs with real data from backend
+        if (data.upper_widths) {
+          for (const [fdi, width] of Object.entries(data.upper_widths)) {
+            const inp = document.querySelector(`.upper-input[data-fdi="${fdi}"]`);
+            if (inp) inp.value = width.toFixed(1);
+          }
+        }
+        if (data.lower_widths) {
+          for (const [fdi, width] of Object.entries(data.lower_widths)) {
+            const inp = document.querySelector(`.lower-input[data-fdi="${fdi}"]`);
+            if (inp) inp.value = width.toFixed(1);
+          }
+        }
+
+        // Arch dimensions and Spee can be populated here if backend returns them
+        if (data.upper_arch_length !== undefined) {
+          const inp = document.getElementById('upper-arch-length');
+          if (inp) inp.value = data.upper_arch_length.toFixed(1);
+        }
+        if (data.lower_arch_length !== undefined) {
+          const inp = document.getElementById('lower-arch-length');
+          if (inp) inp.value = data.lower_arch_length.toFixed(1);
+        }
+        if (data.upper_molar_width !== undefined) {
+          const inp = document.getElementById('upper-molar-width');
+          if (inp) inp.value = data.upper_molar_width.toFixed(1);
+        }
+        if (data.lower_molar_width !== undefined) {
+          const inp = document.getElementById('lower-molar-width');
+          if (inp) inp.value = data.lower_molar_width.toFixed(1);
+        }
+        if (data.spee_depth !== undefined) {
+          const inp = document.getElementById('lower-spee-depth');
+          if (inp) inp.value = data.spee_depth.toFixed(1);
+        }
+      } else {
+        alert("后端计算错误: " + res.message);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("连接后端服务失败，请确保 server.py 正在运行！");
+    } finally {
+      const btn = document.getElementById('btn-calculate');
+      btn.innerText = '进行分析计算';
+      btn.disabled = false;
+      
+      // Perform the local frontend analysis using the populated data
+      this.performAnalysisLocal();
+    }
+  }
+
+  performAnalysisLocal() {
+    const data = this.collectData();
+    const results = this.analyzer.calculate(data);
+    this.renderResults(results);
+  }
+
+  performAnalysis() {
+    // When called externally, attempt to fetch backend data first
+    this.fetchBackendData();
+  }
+
+  drawArchCurve(upperW, upperP, lowerW, lowerP) {
+    const canvas = document.getElementById('arch-curve-canvas');
+    if (!canvas) return;
+    canvas.style.display = 'inline-block';
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Setup coordinates: center top is origin (incisors)
+    const scale = 2.0; // 1mm = 2px
+    const centerX = canvas.width / 2;
+    const topY = 20;
+
+    const drawParabola = (W, P, color, label) => {
+      // Basic safeguard: Arch perimeter P must be slightly greater than width W
+      if (W <= 0 || P <= W) return;
+      
+      // Mathematical approximation of Parabola arc length to find depth D
+      // P ~ W + (8/3)*(D^2 / W)  => D = sqrt( (P - W) * W * 0.375 )
+      const D = Math.sqrt((P - W) * W * 0.375);
+      
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      
+      const a = D / Math.pow(W/2, 2);
+      
+      for (let x = -W/2; x <= W/2; x += 0.5) {
+        const y = a * x * x;
+        const px = centerX + x * scale;
+        const py = topY + y * scale;
+        if (x === -W/2) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // Labeling
+      ctx.fillStyle = color;
+      ctx.font = '12px "Inter", sans-serif';
+      ctx.fillText(label, centerX + (W/2)*scale - 30, topY + D*scale + 15);
+    };
+
+    drawParabola(upperW, upperP, '#00d4aa', '上颌 (U)');
+    drawParabola(lowerW, lowerP, '#4a90e2', '下颌 (L)');
   }
 }

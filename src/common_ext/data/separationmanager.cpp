@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -561,7 +561,7 @@ void SeparationManager::loadSourceMesh(QString& _file_path, MeshDocument* _md, v
 #if PLATFORM_IOS
     string file_name = _file_path.toStdString();
 #else
-    string file_name = _file_path.toLocal8Bit();
+    string file_name = _file_path.toLocal8Bit().constData();
 #endif
 
 		err = vcg::tri::io::ImporterSTL<CMeshO>::Open(new_mesh, (file_name).c_str(), loadmask);
@@ -594,7 +594,7 @@ void SeparationManager::loadSourceMesh(QString& _file_path, MeshDocument* _md, v
 #if PLATFORM_IOS
     string file_name = _file_path.toStdString();
 #else
-    string file_name = _file_path.toLocal8Bit();
+    string file_name = _file_path.toLocal8Bit().constData();
 #endif
 		err = vcg::tri::io::ImporterSTL<CMeshO>::Open(new_compare_model->cm, (file_name).c_str(), loadmask);
 		if (err != 0)

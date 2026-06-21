@@ -17,6 +17,10 @@ macx:INCLUDEPATH += .. $$VCGDIR $$EIGENDIR $$GLEWDIR/include $$COMMON_BASE $$SPD
 macx:LIBS += -L../distrib/ -lcommon -lcommon_base
 macx:DESTDIR = ../distrib
 
+linux:INCLUDEPATH += .. $$VCGDIR $$EIGENDIR $$GLEWDIR/include $$COMMON_BASE $$SPDLOG/include $$UI_COMMONDIR
+linux:LIBS += -L../distrib/ -lcommon -lcommon_base
+linux:DESTDIR = ../distrib
+
 # Windows configuration
 win32-msvc:INCLUDEPATH += .. $$VCGDIR $$GLEWDIR/include $$COMMON_BASE $$SPDLOG/include $$UI_COMMONDIR ../
 win32-msvc:LIBSDIR =

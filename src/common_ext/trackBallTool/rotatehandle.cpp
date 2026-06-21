@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 * FusionAnalyser - Digital Dental Model Analysis Software
 *
 * Copyright (C) 2024-2026 AI-Align (基骨智能)
@@ -24,7 +24,7 @@
 #include "rotatehandle.h"
 #include "MeshExt/AbsMesh.h"
 #include "util/utility_tools.h"
-#include "FusionAnalyser/glarea.h"
+
 
 RotateHandle::RotateHandle(AbsMesh *_obj, AdjDirect _direct, float _radius, float _fine_step)
 	:CustomAdjustingHandle(_obj, _direct, _radius, _fine_step)
