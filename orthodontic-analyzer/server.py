@@ -5,6 +5,19 @@ import base64
 import os
 import subprocess
 import tempfile
+import sys
+
+# Add parent dir to python path to import ai_segmentation
+PARENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(PARENT_DIR)
+sys.path.append(PROJECT_ROOT)
+
+try:
+    from ai_segmentation.inference import run_inference
+except ImportError as e:
+    print(f"Warning: Could not import ai_segmentation: {e}")
+    run_inference = None
+
 
 PORT = 8001
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
@@ -39,6 +52,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     upper_path_vm = "/home/ubuntu/fusionanalyser/orthodontic-analyzer/temp/temp_upper.stl"
                 else:
                     upper_path_vm = "/home/ubuntu/fusionanalyser/orthodontic-analyzer/example/upper.stl"
+                    upper_path_mac = os.path.join(DIRECTORY, "example", "upper.stl")
                 
                 if lower_b64:
                     lower_path_mac = os.path.join(temp_dir, "temp_lower.stl")
@@ -47,9 +61,31 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     lower_path_vm = "/home/ubuntu/fusionanalyser/orthodontic-analyzer/temp/temp_lower.stl"
                 else:
                     lower_path_vm = "/home/ubuntu/fusionanalyser/orthodontic-analyzer/example/lower.stl"
+                    lower_path_mac = os.path.join(DIRECTORY, "example", "lower.stl")
 
-                # Read metrics if provided
                 metrics = payload.get('metrics', {})
+                # Run AI inference to compute actual metrics
+                if run_inference is not None and (upper_path_mac or lower_path_mac):
+                    print("Running AI inference to calculate metrics...")
+                    ai_metrics = run_inference(upper_path_mac, lower_path_mac)
+                    metrics.update(ai_metrics)
+                    print(f"AI computed metrics: {ai_metrics}")
+                else:
+                    print("Skipping AI inference (module not found or no meshes uploaded). Using mock metrics.")
+
+                # Format for C++ backend which expects 'upperWidths' and 'lowerWidths'
+                if "tooth_widths" in metrics:
+                    upper_w = {}
+                    lower_w = {}
+                    for fdi, w in metrics["tooth_widths"].items():
+                        if str(fdi).startswith('1') or str(fdi).startswith('2'):
+                            upper_w[str(fdi)] = w
+                        elif str(fdi).startswith('3') or str(fdi).startswith('4'):
+                            lower_w[str(fdi)] = w
+                    metrics["upperWidths"] = upper_w
+                    metrics["lowerWidths"] = lower_w
+
+                # Write the updated metrics to temp dir for C++ engine
                 metrics_path_mac = os.path.join(temp_dir, "metrics.json")
                 with open(metrics_path_mac, "w") as f:
                     json.dump(metrics, f)
@@ -95,6 +131,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(json.dumps(data).encode('utf-8'))
 
 if __name__ == '__main__':
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.ThreadingTCPServer(("", PORT), Handler) as httpd:
         print(f"API Server listening on port {PORT}")
         httpd.serve_forever()

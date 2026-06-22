@@ -34,13 +34,13 @@ FusionAnalyser 现已成为一个开箱即用的**纯前端数字正畸模型分
    cd FusionAnalyser/orthodontic-analyzer
    ```
 
-2. 启动任意静态文件服务器（例如使用 macOS 自带的 Python）：
+2. 启动服务（务必使用附带的脚本以激活 AI 模型所在的 Conda 环境）：
    ```bash
-   python3 -m http.server 8765
+   ./start_server.sh
    ```
 
 3. 在浏览器中访问：
-   **http://localhost:8765**
+   **http://localhost:8001**
 
 ## 📂 目录结构
 
@@ -77,7 +77,7 @@ FusionAnalyser/
 
 ## 📝 TODO LIST (下一步计划)
 为了将此半开源底座升级为一个开箱即用的完整智能化医疗产品，我们需要补足“AI 牙齿分割”这一环：
-- [ ] **调研开源的 3D 齿科分割模型**：寻找基于深度学习（如 PointNet++、MeshCNN 等）的开源牙齿分割方案（例如从 GitHub、HuggingFace 或医疗影像开源数据集挑战中筛选）。
-- [ ] **开发/集成特征提取服务**：将挑选出的 AI 模型封装为微服务，能够吃进 `.stl` 裸模，吐出单颗牙的宽度、远近中点及牙弓长度。
-- [ ] **打通特征数据管道**：将 AI 模块输出的参数对接回现有的 C++ `DentalAnalysisData` 类，替换掉现有的硬编码 Mock 数据。
+- [x] **调研开源的 3D 齿科分割模型**：已集成基于 MeshSegNet 的开源牙齿分割方案（支持 15 类+背景的最新模型权重）。
+- [x] **开发/集成特征提取服务**：已将模型封装为推理服务 (`ai_segmentation/inference.py`)，能够吃进 `.stl` 裸模，吐出单颗牙的宽度，并经 PyGCO 平滑处理。
+- [x] **打通特征数据管道**：已将 AI 模块输出的参数对接回现有的 C++ 引擎（通过 `server.py` 更新 `metrics.json`），成功替换掉现有的硬编码 Mock 数据。
 - [ ] **前端交互兜底（备选方案）**：如果在 Web 端部署 AI 模型成本过高，可优先在 Three.js 前端开发一套手动标点工具，让医生在 3D 模型上手动打点测量牙宽，随后传给 C++ 引擎。
